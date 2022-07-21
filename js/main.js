@@ -4,8 +4,25 @@ Ogni cella ha un numero progressivo, da 1 a 100.
 Ci saranno quindi 10 caselle per ognuna delle 10 righe.
 Quando l’utente clicca su ogni cella, la cella cliccata si colora di azzurro ed emetto un messaggio in console con il numero della cella cliccata. */
   
+
+//variabili
  
 const playDom = document.getElementById('play');
+
+
+//definisco il numero di celle
+const numCell = 100
+
+// definisco numero bombe e le identifico 
+const NUM_BOMB = 20; 
+const bombList = createBomb(NUM_BOMB, numCell);
+//variabile punti
+let score = 0;
+//fine del gioco
+let gameOver = false; 
+
+
+
 
 playDom.addEventListener('click',
 
@@ -19,15 +36,22 @@ playDom.addEventListener('click',
             //effetti al click 
             currentElement.addEventListener('click',
                 function (){
-                    if (bombList.includes(i)) {
-                        alert('Hai perso!');
-                    } else {
-                        alert ('Continua a giocare');
-                    }
 
-                    console.log(i);
-                    console.log(this.innerText);
-                    this.classList.toggle('clicked');
+                    if (gameOver == false) {
+                        if (bombList.includes(i)) {
+                            this.classList.add('bomb');
+                            gameOver = true;
+                            writeScore (`Gave Over ! Punteggio: ${score}`);
+                            
+                            
+                        } else {
+                            if (!this.classList.contains('clicked') ){
+                                score++;
+                                writeScore(`Punteggio: ${score}`);
+                                this.classList.add('clicked');
+                            }
+                        }
+                    }
                 }
             );
             gridDom.append(currentElement);
@@ -37,16 +61,6 @@ playDom.addEventListener('click',
 
 
 
-
-
-//definisco il numero di celle
-const numCell = 100
-
-// definisco numero bombe e le identifico 
-const NUM_BOMB = 20; 
-const bombList = createBomb(NUM_BOMB, numCell);
-
-console.log(bombList);
 
 
 
@@ -98,7 +112,7 @@ function createBomb(NUM_BOMB, numCell) {
 
 }
 
-function writeScore(number){
+function writeScore(text )  {
     const scoreDom = document.getElementById('score');
-    scoreDom.innerHTML = 'Punteggio'
+    scoreDom.innerHTML = text;
 }
